@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { getBooks} from '../services/LivroService';
 import { useEffect } from 'react';
+import LazyLoad from 'react-lazyload';
 const Books = () => { 
   const [livros, setLivros] = useState([]);
   
@@ -21,8 +22,10 @@ const Books = () => {
           {
             livros.map(livro =>
               <div class="d-flex flex-column" key={livro.id}>
-                <img src={livro.pictpath}>
+                <LazyLoad>
+                <img src={require(`../media/${livro.pictpath}`)} height={170}>
                 </img>
+                </LazyLoad>
                 <label>Nome: {livro.name}</label>
                 <label>Valor: {livro.valor}</label>
               </div>

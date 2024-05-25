@@ -6,3 +6,5 @@ INSERT INTO usuario(username,password,adminkey) VALUES('admin', '4dm1n', 1);
 INSERT INTO usuario(username,password,adminkey) VALUES('Gustavo', '12345', 0);
 INSERT INTO usuario(username,password,adminkey) VALUES('Madetr', '67890', 0);
 INSERT INTO usuario(username,password,adminkey) VALUES('Fulano', 'ciclano', 0);
+
+INSERT INTO livro(name,descricao,valor,pictpath) VALUES('Harry Potter', 'Livro do mago', 36.00, 'img1.jpg');
