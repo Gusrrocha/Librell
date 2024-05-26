@@ -60,11 +60,11 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public Long getKey() {
+	public Long getAdminkey() {
 		return adminkey;
 	}
 
-	public void setKey(Long adminkey) {
+	public void setAdminkey(Long adminkey) {
 		this.adminkey = adminkey;
 	}
 

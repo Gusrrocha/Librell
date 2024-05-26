@@ -1,5 +1,6 @@
 package com.rogu.librell.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.rogu.librell.entities.User;
 import com.rogu.librell.repositories.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService; 
+import org.springframework.security.core.userdetails.UsernameNotFoundException; 
 
 @Service
 public class UserService {
@@ -38,8 +43,28 @@ public class UserService {
 	public void deleteUser(Long id) {
 		rep.deleteById(id);
 	}
-	public User getLogin(User user){
+	public UserDetails getLogin(User user) throws UsernameNotFoundException{
 		User resultado = rep.loginU(user.getUsername(), user.getPassword());
-		return resultado;
+		
+		if (resultado==null) {
+			throw new UsernameNotFoundException("Nenhum usuário with this username.");
+		}
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		return new org.springframework.security.core.userdetails.User( 
+                user.getUsername(), 
+                user.getPassword(), 
+                authorities); 
+	}
+	public UserDetails getLogin(String user) throws UsernameNotFoundException{
+		User resultado = rep.findByUsername(user);
+		
+		if (resultado==null) {
+			throw new UsernameNotFoundException("Nenhum usuário with this username.");
+		}
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		return new org.springframework.security.core.userdetails.User( 
+                resultado.getUsername(), 
+                resultado.getPassword(), 
+                authorities); 
 	}
 }
