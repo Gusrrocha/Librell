@@ -1,5 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getToken } from '../services/auth';
+import { useJwt, decodeToken } from 'react-jwt';
 const HeaderComponent = () => {
   const navigator = useNavigate();
   function login(){
@@ -9,6 +11,10 @@ const HeaderComponent = () => {
   function add_book(){
     navigator('/livros/addlivro');
   }
+
+  const token = getToken();
+
+
   return (
     <div>
         <header>
@@ -38,9 +44,11 @@ const HeaderComponent = () => {
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                       </ul>
                     </li>
+
                     <li class="nav-item">
-                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                      <a class="nav-link" href="#">Disabled</a>
                     </li>
+                
                   </ul>
                   <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>

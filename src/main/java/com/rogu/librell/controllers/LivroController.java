@@ -22,7 +22,7 @@ import com.rogu.librell.services.LivroService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value="/livro")
+@RequestMapping(value="/api/v1/livro")
 public class LivroController {
 	
 	@Autowired 

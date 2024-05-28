@@ -1,15 +1,16 @@
 import React from 'react'
 import { useState } from 'react'
-import { loginUser } from '../services/UserService'
+import { findUser, loginUser } from '../services/UserService'
 import { useNavigate } from 'react-router-dom'
+import { login } from '../services/auth'
 const Login = () => {
-    const [username, setUser] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("");
     const navigator = useNavigate();
 
-    const handleUsername = (e) => {
-        setUser(e.target.value);
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
     }
     const handlePassword = (e) => {
         setPassword(e.target.value);
@@ -17,19 +18,19 @@ const Login = () => {
     const logUser = (e) => {
         e.preventDefault();
         try{
-            if (!username, !password){
+            if (!email, !password){
                 setError("Por favor, preencha todos os campos.")
                 return;
             }
-        
-            const user = {username, password}
+            const user = {email, password}
             console.log(user);
             loginUser(user).then((response) =>{
                 console.log(response.data);
+                login(response.data.jwt);
                 navigator("/");
             }).catch(error => {
                 
-                setError('Usuário ou senha incorretos.')
+                setError('E-mail ou senha incorretos.')
             })
         }catch(error){
             console.error('Falha no login:', error.response ? error.response.data : error.message); 
@@ -46,13 +47,13 @@ const Login = () => {
                     <div className='card-body'>
                         <form>
                             <div className='form-group mb-2'>
-                                <label className='form-label'>Username:</label>
+                                <label className='form-label'>E-mail:</label>
                                 <input type="text"
-                                       placeholder='Digite o nome de usuário'
-                                       name='username'
-                                       value={username}
+                                       placeholder='Digite o endereço de e-mail'
+                                       name='email'
+                                       value={email}
                                        className={"form-control"}
-                                       onChange={handleUsername}
+                                       onChange={handleEmail}
                                        >
                                 </input>
                                 { error && <div className='invalid-feedback'>{error}</div>}
