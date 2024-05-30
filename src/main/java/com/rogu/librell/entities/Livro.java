@@ -73,8 +73,8 @@ public class Livro implements Serializable{
 		return pictpath;
 	}
 
-	public void setPictpath(String pictpath) {
-		this.pictpath = pictpath;
+	public void setPictpath(String destination) {
+		this.pictpath = destination;
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package com.rogu.librell.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +33,9 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
         		.headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/user/**").permitAll()
-                		.requestMatchers("/h2-console/**")
+                		.requestMatchers("/h2-console/**").permitAll()
+                		.requestMatchers("/api/v1/livro/**").permitAll()
+                		.requestMatchers("/api/v1/files/**")
                         .permitAll().anyRequest().authenticated()
                         )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

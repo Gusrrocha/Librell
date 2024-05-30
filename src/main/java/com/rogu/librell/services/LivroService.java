@@ -1,8 +1,15 @@
 package com.rogu.librell.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import com.rogu.librell.entities.Livro;
@@ -15,6 +22,8 @@ public class LivroService {
 	
 	@Autowired
 	LivroRepository rep;
+
+
 	
 	public List<Livro> getAllBooks(){
 		List<Livro> lista = rep.findAll();
@@ -22,7 +31,23 @@ public class LivroService {
 	}
 	
 	public void addBook(Livro livro) {
+		Path dir = Paths.get("C:\\Users\\Pichau\\Documents\\java\\springg\\librell\\frontend\\src\\media");  // specify your directory
+
+		try {
+			Optional<Path> lastFilePath = Files.list(dir)
+			          .filter(p -> !Files.isDirectory(p))
+			          .sorted((p1, p2)-> Long.valueOf(p2.toFile().lastModified())
+			            .compareTo(p1.toFile().lastModified()))
+			          .findFirst();
+				System.out.println(lastFilePath.toString());
+				livro.setPictpath(lastFilePath.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  // finally get the last file using simple comparator by lastModified field
+		
 		rep.save(livro);
+		
 	}
 	
 	public void updateBook(Livro livro, Long id) {
@@ -34,4 +59,5 @@ public class LivroService {
 		liv.setPictpath(livro.getPictpath());
 		rep.save(liv);
 	}
+
 }

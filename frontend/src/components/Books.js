@@ -24,7 +24,7 @@ const Books = () => {
               <a class='text-decoration-none text-reset' href=''>
               <div class="d-flex flex-column" key={livro.id}>
                 <LazyLoad>
-                <img src={require(`../media/${livro.pictpath}`)} height={170}>
+                <img src={require(`../${livro.pictpath.slice(69).replace("\\","/").replace("]","")}`)} height={170}>
                 </img>
                 </LazyLoad>
                 <label>Nome: {livro.name}</label>

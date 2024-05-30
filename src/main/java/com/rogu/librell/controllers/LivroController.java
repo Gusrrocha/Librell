@@ -1,5 +1,6 @@
 package com.rogu.librell.controllers;
 
+
 import java.time.Instant;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.rogu.librell.exceptions.BadRequestException;
 import com.rogu.librell.infra.RestErrorMessage;
 import com.rogu.librell.services.LivroService;
 
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value="/api/v1/livro")
@@ -35,8 +37,8 @@ public class LivroController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@PostMapping()
-	public ResponseEntity<?> addBook(@RequestBody Livro livro)
+	@PostMapping("/add")
+	public ResponseEntity<?> addBook(@RequestBody Livro livro) 
 	{
 		try 
 		{
@@ -54,11 +56,13 @@ public class LivroController {
 			badRequest.setPath("path");
 			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badRequest);
-		}	
+		}
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updateBook(@RequestBody Livro livro, @PathVariable Long id){
 		service.updateBook(livro, id);
 		return ResponseEntity.ok("Livro atualizado com sucesso!");
 	}
+	
+	
 }

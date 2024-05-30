@@ -26,7 +26,7 @@ const Login = () => {
             console.log(user);
             loginUser(user).then((response) =>{
                 console.log(response.data);
-                login(response.data.jwt);
+                login(response.data.token);
                 navigator("/");
             }).catch(error => {
                 
