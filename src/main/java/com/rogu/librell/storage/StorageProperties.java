@@ -7,7 +7,7 @@ public class StorageProperties {
 	/**
 	 * Folder location for storing files
 	 */
-	private String location = "frontend/src/media";
+	private String location = "frontend/public/images";
 
 	public String getLocation() {
 		return location;

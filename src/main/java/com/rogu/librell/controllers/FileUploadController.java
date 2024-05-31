@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,8 +61,13 @@ public class FileUploadController {
 	}
 
 	@PostMapping("/")
-	public void handleFileUpload(@RequestParam("file") MultipartFile file) {
-		storageService.store(file);
+	public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
+		try {
+			storageService.store(file);
+			return ResponseEntity.ok().build();
+		} catch(Exception e) {
+			return ResponseEntity.badRequest().body("O tamanho do arquivo é maior do que 1MB");
+		}
 	}
 
 	@ExceptionHandler(StorageFileNotFoundException.class)

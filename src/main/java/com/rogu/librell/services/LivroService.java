@@ -31,7 +31,7 @@ public class LivroService {
 	}
 	
 	public void addBook(Livro livro) {
-		Path dir = Paths.get("C:\\Users\\Pichau\\Documents\\java\\springg\\librell\\frontend\\src\\media");  // specify your directory
+		Path dir = Paths.get("C:\\Users\\Pichau\\Documents\\java\\springg\\librell\\frontend\\public\\images");  // specify your directory
 
 		try {
 			Optional<Path> lastFilePath = Files.list(dir)
@@ -39,7 +39,6 @@ public class LivroService {
 			          .sorted((p1, p2)-> Long.valueOf(p2.toFile().lastModified())
 			            .compareTo(p1.toFile().lastModified()))
 			          .findFirst();
-				System.out.println(lastFilePath.toString());
 				livro.setPictpath(lastFilePath.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -73,7 +73,6 @@ const Login = () => {
                         <a href='/cadastrar'>Cadastrar</a>
                     </div>
                 </div>
-
             </div>
         </div>
     )

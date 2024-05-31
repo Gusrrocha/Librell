@@ -6,38 +6,96 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { addLivro } from '../services/LivroService';
+import { decodeToken } from 'react-jwt';
+
 
 const HeaderComponent = () => {
   const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
+  const [descricao, setDesc] = useState("");
   const [valor, setValue] = useState("");
-  const [img, setImg] = useState("");
-  const [show, setShow] = useState(false);
-
+  const [errors, setErrors] = useState({
+    name: "",
+    descricao: "",
+    valor: ""
+  })
+  const [imgErr, setImgErr] = useState("")
+  const [imgOld, setimgOld] = useState("")
+  const [show, setShow] = useState(false)
+  let admin = false;
+  
   const handleName = (e) => setName(e.target.value);
   const handleDesc = (e) => setDesc(e.target.value);
   const handleValue = (e) => setValue(e.target.value);
-  const handleImg = (e) => setImg(e.target.files[0])
+  function validateForm(){
+    let valid = true;
+    const regex = new RegExp("")
+    const errorsCopy = {... errors}
+
+    if(name.trim()){
+        errorsCopy.name = "";
+    } else{
+        errorsCopy.name = "Nome do livro é necessário";
+        valid = false;
+    }
+    
+    if(descricao.trim()){
+        errorsCopy.descricao = "";
+    } else{
+        errorsCopy.descricao = "Descrição do livro é necessário";
+        valid = false;
+    }
+
+    if(valor.trim()){
+        errorsCopy.valor = "";
+    } else{
+        errorsCopy.valor = "Valor do livro é requerido";
+        valid = false;
+    }
+
+    setErrors(errorsCopy);
+
+    return valid;
+  }
+
+  const handleImg = (e) => {
+    if(e.target.files[0].size > 1048576) {
+      setImgErr("O arquivo é muito grande. Por favor, insira um arquivo menor que 1MB");
+      document.getElementById("imginput").value = "";
+    }
+    else
+    {
+      setImgErr("");
+      const data = new FormData();
+      data.append("file", document.getElementById("imginput").files[0]);
+      fetch("http://localhost:8082/api/v1/files/", {
+        method: "POST",
+        body: data,
+      });
+    }
+    setimgOld(e.target.files[0]);
+  }
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleForm = (e) => {
     e.preventDefault();
-    console.log(img);
-    const data = new FormData();
-    data.append("file", img);
-    fetch("http://localhost:8082/api/v1/files/", {
-      method: "POST",
-      body: data,
-    });
-    const livro = {name,desc,valor}
+    if(validateForm()){
+    if(document.getElementById("imginput").value === "")
+    {
+      setImgErr("Insira a imagem do livro.")
+    }   
+    else
+      {
+      
+        const livro = {name,descricao,valor}
 
-    addLivro(livro).then((response) => {
-      console.log(response.data);
-    })
-    handleClose();
-    setImg("")
-    navigator("/livros");
+        addLivro(livro).then((response) => {
+          console.log(response.data);
+        })
+        document.getElementById("imginput").value = "";
+        handleClose();
+      }
+    } 
   }
   const navigator = useNavigate();
 
@@ -54,6 +112,25 @@ const HeaderComponent = () => {
     navigator('/')
   }
   const token = getToken();
+  if(token){
+    const dec = decodeToken(token);
+    
+    if(dec.sub.replace("[","").replace("]","") === "ROLE_ADMIN"){
+      admin = true;
+    }
+  }
+    
+  function Adm(){
+    if(admin)
+      return  <>
+                <li class="nav-item">
+                <Button variant="primary" onClick={handleShow}>
+                  Adicionar Livro
+                </Button>
+                </li>
+              </>
+      
+  }
 
   function Log(tok){
     if (token) {
@@ -66,8 +143,10 @@ const HeaderComponent = () => {
     } 
     return <button className="btn btn-primary ml-2" onClick={login}>Log-in</button> 
   }
+  
+
   return (
-    <div>
+    <div style={{position:"relative", width:"100vw"}}>
         <header>
             {/* <nav className="navbar navbar-dark bg-dark">
                 <a className="navbar-brand" href="/">Librell</a>
@@ -84,14 +163,8 @@ const HeaderComponent = () => {
                     <li class="nav-item">
                       <a class="nav-link" href="/livros">Livros</a>
                     </li>
-
-                    <li class="nav-item">
-                    <Button variant="primary" onClick={handleShow}>
-                      Adicionar Livro
-                    </Button>
-
-                    </li>
-                
+                    <Adm>
+                    </Adm>
                   </ul>
                   <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
@@ -103,8 +176,6 @@ const HeaderComponent = () => {
                 </div>
               </div>
             </nav>
-        </header>
-        <body>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Adicionar Livro</Modal.Title>
@@ -113,34 +184,36 @@ const HeaderComponent = () => {
               <Form>
                 <Form.Group class="mb-3" controlId='formAdd'>
                   <Form.Label>Nome</Form.Label>
-                  <Form.Control type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
+                  <Form.Control isInvalid={`${errors.name ? true : false}`} type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
+                  { errors.name && <div className='invalid-feedback'>{errors.name}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formDesc'>
                   <Form.Label>Descrição</Form.Label>
-                  <Form.Control type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
+                  <Form.Control isInvalid={`${errors.descricao ? true : false}`} type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
+                  { errors.descricao && <div className='invalid-feedback'>{errors.descricao}</div>}
                 </Form.Group>
-                <Form.Group class="mb-3" controlId='formDesc'>
+                <Form.Group class="mb-3" controlId='formValor'>
                   <Form.Label>Valor</Form.Label>
-                  <Form.Control type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
+                  <Form.Control isInvalid={`${errors.valor ? true : false}`} type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
+                  { errors.valor && <div className='invalid-feedback'>{errors.valor}</div>}
                 </Form.Group>
-                <Form.Group class="mb-3" controlId='formDesc'>
-                {img && (
-                  <div>
-                    {/* Display the selected image */}
-                    <img
-                      alt="not found"
-                      width={"250px"}
-                      src={URL.createObjectURL(img)}
-                    />
-                    <br /> <br />
-                    {/* Button to remove the selected image */}
-                    <button onClick={() => setImg(null)}>Remove</button>
-                  </div>
-                  )}
+                <Form.Group class="mb-3" controlId='formImg'>
+                {/*                 
+                document.getElementById("imginput").files[0] === null && 
+                <div>
+                  <img
+                    alt="not found"
+                    width={"250px"}
+                    src={URL.createObjectURL(document.getElementById("imginput").files[0])}
+                  />
+                  <br /> <br />
+                  <button onClick={() => document.getElementById("imginput").clear()}>Remove</button>
+                </div> 
+                */}
                   <Form.Label>Imagem do livro</Form.Label>
-                  <Form.Control type="file" onChange={handleImg} placeholder='Insira a imagem conténdo a capa do livro'/>
+                  <input id='imginput' type="file" accept="image/png,image/jpg,image/jpeg" onChange={handleImg} placeholder='Insira a imagem conténdo a capa do livro'/>
+                  { <div>{imgErr}</div>}
                 </Form.Group>
-
               </Form>
             </Modal.Body>
             <Modal.Footer>
@@ -152,7 +225,7 @@ const HeaderComponent = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-        </body>
+        </header>
     </div>
   )
 }
