@@ -3,11 +3,13 @@ package com.rogu.librell.controllers;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rogu.librell.entities.Livro;
+import com.rogu.librell.entities.Pedido;
+import com.rogu.librell.entities.User;
 import com.rogu.librell.exceptions.BadRequestException;
 import com.rogu.librell.infra.RestErrorMessage;
 import com.rogu.librell.services.LivroService;
+import com.rogu.librell.services.impl.UserServiceImpl;
 
 
 @CrossOrigin("*")
@@ -29,6 +34,9 @@ public class LivroController {
 	
 	@Autowired 
 	LivroService service;
+	
+	@Autowired
+	UserServiceImpl userv;
 	
 	@GetMapping()
 	public ResponseEntity<List<Livro>> getAll(){
@@ -64,5 +72,23 @@ public class LivroController {
 		return ResponseEntity.ok("Livro atualizado com sucesso!");
 	}
 	
+	@PostMapping("/buy")
+	public ResponseEntity<String> addPedido(@RequestBody Pedido pedido){
+		System.out.println(pedido);
+		pedido.setUser(userv.findbyEm(pedido.getUser().getEmail()));
+		service.addPedido(pedido);
+		return ResponseEntity.ok("Pedido adicionado com sucesso!");
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id){
+		try {
+			service.deleteBook(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 }

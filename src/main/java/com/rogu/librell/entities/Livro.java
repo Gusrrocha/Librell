@@ -1,7 +1,6 @@
 package com.rogu.librell.entities;
 
 import java.io.Serializable;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +24,7 @@ public class Livro implements Serializable{
 	private Float valor;
 	private String pictpath;
 	
+
 	public Livro() {
 		
 	}

@@ -9,29 +9,30 @@ const Buy = () => {
     const [cNumber, setCNumber] = useState("");
     const [cCVV, setcCVV] = useState("");
 
-    let email = "";
+    let user = "";
     const navigator = useNavigate();
     const handleEndereco = (e) => setEndereco(e.target.value);
     const handlecNumber = (e) => setCNumber(e.target.value);
     const handlecCVV = (e) => setcCVV(e.target.value)
     const token = getToken();
     const dec = decodeToken(token);
-    email = token.email;
     
     const Comprar = (e) =>
     {
+       let livro_id = livro.id;
        e.preventDefault();
-       const pedid = {email, endereco, cNumber, cCVV}
+       user = {"id":null,"firstName":null,"lastName":null,"email":dec.email,"password":"null"}
+       const pedid = {livro_id, user, endereco, cNumber, cCVV}
        compra(pedid).then((response) => {
         console.log(response.data);
        }) 
     }
     return (
-        <div className='linha'>
+        <div className='container'>
             <br></br>
             <br></br>
             <br></br>
-            <div className='card col-md-10 offset-md-3 ' style={{width:"100%",height:"100"}}>
+            <div className='card col-md-2' style={{width:"100%", position:"relative", minWidth: "auto"}}>
                 <h2 className='text-center mt-3'>Compra</h2>
                 <div className='card-body'>
                     <div class="d-flex flex-row bd-highlight mb-3">

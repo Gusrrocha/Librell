@@ -39,7 +39,7 @@ const Books = () => {
             livros.map(livro =>
               <div class="d-flex flex-column border" style={{height: "400px"} && {width: "100px"}}  key={livro.id}>
                 <LazyLoad>
-                <img style={{width:"100%"}} src={`${livro.pictpath.slice(72).replace("\\","/").replace("]","")}`} alt="fa" height={170}>
+                <img style={{width:"100%"}} src={`${livro.pictpath != "Optional.Empty" ?livro.pictpath.slice(72).replace("\\","/").replace("]",""): ""}`} alt="fa" height={170}>
                 </img>
                 </LazyLoad>
                 <label>Nome: {livro.name}</label>

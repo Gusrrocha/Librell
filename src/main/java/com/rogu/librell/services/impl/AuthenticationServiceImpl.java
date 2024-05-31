@@ -25,9 +25,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     @Override
     public AuthResponse signup(AddRequest request) {
-        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName())
-                .email(request.getEmail()).password(passwordEncoder.encode(request.getPassword()))
-                .role(ERole.ROLE_USER).build();
+        var user = new User(null, request.getFirstName(),
+        		request.getLastName(),
+        		request.getEmail(),
+        		passwordEncoder.encode(request.getPassword()),
+        		ERole.ROLE_USER);
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
         return AuthResponse.builder().token(jwt).build();
