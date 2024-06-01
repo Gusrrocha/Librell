@@ -5,10 +5,10 @@ import { update } from "../services/LivroService";
 import { useNavigate } from "react-router-dom";
 const EditBook = () => {
   const livro = JSON.parse(localStorage.getItem("liv"));
-  const [name, setName] = useState("");
-  const [descricao, setDesc] = useState("");
-  const [valor, setValue] = useState("");
-  const [autor, setAutor] = useState("");
+  const [name, setName] = useState(livro.name);
+  const [descricao, setDesc] = useState(livro.descricao);
+  const [valor, setValue] = useState(livro.valor);
+  const [autor, setAutor] = useState(livro.autor);
   const [imgErr, setImgErr] = useState("")
   const [imgOld, setimgOld] = useState("")
   const [errors, setErrors] = useState({
@@ -34,36 +34,7 @@ const EditBook = () => {
   function validateForm(){
     let valid = true;
     const regex = new RegExp("")
-    const errorsCopy = {... errors}
-
-    if(name.trim()){
-      errorsCopy.name = "";
-    } else{
-      errorsCopy.name = "Nome do livro é necessário";
-      valid = false;
-    }
     
-    if(descricao.trim()){
-      errorsCopy.descricao = "";
-    } else{
-      errorsCopy.descricao = "Descrição do livro é necessário";
-      valid = false;
-    }
-
-    if(valor.trim()){
-      errorsCopy.valor = "";
-    } else{
-      errorsCopy.valor = "Valor do livro é requerido";
-      valid = false;
-    }
-    if(autor.trim()){
-      errorsCopy.autor = "";
-    } else{
-      errorsCopy.autor = "Valor do livro é requerido";
-      valid = false;
-    }
-    setErrors(errorsCopy);
-
     return valid;
   }
   const handleForm = (e) => 
@@ -73,10 +44,16 @@ const EditBook = () => {
         {
           if(document.getElementById("imginput2").value === "")
           {
-            setImgErr("Insira a imagem do livro.")
-          } 
+            let pictpath = livro.pictpath;
+            const livr = {autor,name,descricao,valor, pictpath}
+            update(livr,livro.id).then((response) =>
+              console.log(response.data)
+            )
+            document.getElementById("imginput2").value = "";
+            navigator("/livros");
+          }
           else
-          {     
+          {
             let file = document.getElementById("imginput2").files[0];
             let pictpath = document.getElementById("imginput2").files[0].name;
             const livr = {autor,name,descricao,valor, pictpath}
@@ -97,30 +74,34 @@ const EditBook = () => {
   return (
     <>
     <div class="container-fluid">
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <h5 class="text-center">Atualização de Produto</h5>
       <Form>
         <Form.Group class="mb-3" controlId='formAdd'>
           <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
-          { errors.name && <div className='invalid-feedback'>{errors.name}</div>}
+          <Form.Control type="text" onChange={handleName} defaultValue={livro.name} placeholder="Insira o nome do livro"/>
         </Form.Group>
         <Form.Group class="mb-3" controlId='formDesc'>
           <Form.Label>Descrição</Form.Label>
-          <Form.Control type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
-          { errors.descricao && <div className='invalid-feedback'>{errors.descricao}</div>}
+          <Form.Control type="text" onChange={handleDesc} defaultValue={livro.descricao} placeholder='Insira a descrição do livro'/>
+
         </Form.Group>
         <Form.Group class="mb-3" controlId='formAutor'>
           <Form.Label>Autor</Form.Label>
-          <Form.Control type="text" onChange={handleAutor} placeholder='Insira o Autor do livro'/>
-          { errors.autor && <div className='invalid-feedback'>{errors.autor}</div>}
+          <Form.Control type="text" onChange={handleAutor} defaultValue={livro.autor} placeholder='Insira o Autor do livro'/>
+
         </Form.Group>
         <Form.Group class="mb-3" controlId='formValor'>
           <Form.Label>Valor</Form.Label>
-          <Form.Control type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
-          { errors.valor && <div className='invalid-feedback'>{errors.valor}</div>}
+          <Form.Control type="number" onChange={handleValue} defaultValue={livro.valor} placeholder='Insira o valor do livro'/>
+
         </Form.Group>
         <Form.Group class="mb-3" controlId='formImg'>
-          <Form.Label>Imagem do livro</Form.Label>
-          <input id='imginput2' type="file" accept="image/png,image/jpg,image/jpeg" onChange={handleImg} placeholder='Insira a imagem conténdo a capa do livro'/>
+          <Form.Label>Escolha a imagem do livro:</Form.Label>
+          <input id='imginput2' type="file" accept="image/png,image/jpg,image/jpeg"  onChange={handleImg} placeholder='Insira a imagem conténdo a capa do livro'/>
           { <div style={{color:"red"}}>{imgErr}</div>}
         </Form.Group>
         <button class="btn btn-outline-white" onClick={() => navigator("/livros")}>Cancelar</button>
