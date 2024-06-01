@@ -18,7 +18,7 @@ public class Livro implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+	private String autor;
 	private String name;
 	private String descricao;
 	private Float valor;
@@ -29,8 +29,9 @@ public class Livro implements Serializable{
 		
 	}
 
-	public Livro(Long id, String name, String descricao, Float valor, String pictpath) {
+	public Livro(Long id, String autor, String name, String descricao, Float valor, String pictpath) {
 		this.id = id;
+		this.autor = autor;
 		this.name = name;
 		this.descricao = descricao;
 		this.valor = valor;
@@ -77,11 +78,21 @@ public class Livro implements Serializable{
 		this.pictpath = destination;
 	}
 
+	public String getAutor() {
+		return autor;
+	}
+
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
+
 	@Override
 	public String toString() {
-		return "Livro [id=" + id + ", name=" + name + ", descricao=" + descricao + ", valor=" + valor + ", pictpath="
-				+ pictpath + "]";
+		return "Livro [id=" + id + ", autor=" + autor + ", name=" + name + ", descricao=" + descricao + ", valor="
+				+ valor + ", pictpath=" + pictpath + "]";
 	}
+
+
 	
 	
 	

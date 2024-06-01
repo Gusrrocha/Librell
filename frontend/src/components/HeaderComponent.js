@@ -7,16 +7,18 @@ import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { addLivro } from '../services/LivroService';
 import { decodeToken } from 'react-jwt';
-
+import { BoxArrowInRight } from 'react-bootstrap-icons';
 
 const HeaderComponent = () => {
   const [name, setName] = useState("");
   const [descricao, setDesc] = useState("");
   const [valor, setValue] = useState("");
+  const [autor, setAutor] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     descricao: "",
-    valor: ""
+    valor: "",
+    autor: ""
   })
   const [imgErr, setImgErr] = useState("")
   const [imgOld, setimgOld] = useState("")
@@ -26,53 +28,45 @@ const HeaderComponent = () => {
   const handleName = (e) => setName(e.target.value);
   const handleDesc = (e) => setDesc(e.target.value);
   const handleValue = (e) => setValue(e.target.value);
+  const handleAutor = (e) => setAutor(e.target.value);
   function validateForm(){
     let valid = true;
     const regex = new RegExp("")
     const errorsCopy = {... errors}
 
     if(name.trim()){
-        errorsCopy.name = "";
+      errorsCopy.name = "";
     } else{
-        errorsCopy.name = "Nome do livro é necessário";
-        valid = false;
+      errorsCopy.name = "Nome do livro é necessário";
+      valid = false;
     }
     
     if(descricao.trim()){
-        errorsCopy.descricao = "";
+      errorsCopy.descricao = "";
     } else{
-        errorsCopy.descricao = "Descrição do livro é necessário";
-        valid = false;
+      errorsCopy.descricao = "Descrição do livro é necessário";
+      valid = false;
     }
 
     if(valor.trim()){
-        errorsCopy.valor = "";
+      errorsCopy.valor = "";
     } else{
-        errorsCopy.valor = "Valor do livro é requerido";
-        valid = false;
+      errorsCopy.valor = "Valor do livro é requerido";
+      valid = false;
     }
-
+    if(autor.trim()){
+      errorsCopy.autor = "";
+    } else{
+      errorsCopy.autor = "Valor do livro é requerido";
+      valid = false;
+    }
     setErrors(errorsCopy);
 
     return valid;
   }
 
   const handleImg = (e) => {
-    if(e.target.files[0].size > 1048576) {
-      setImgErr("O arquivo é muito grande. Por favor, insira um arquivo menor que 1MB");
-      document.getElementById("imginput").value = "";
-    }
-    else
-    {
-      setImgErr("");
-      const data = new FormData();
-      data.append("file", document.getElementById("imginput").files[0]);
-      fetch("http://localhost:8082/api/v1/files/", {
-        method: "POST",
-        body: data,
-      });
-    }
-    setimgOld(e.target.files[0]);
+
   }
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -86,9 +80,17 @@ const HeaderComponent = () => {
     }   
     else
       {
-      
-        const livro = {name,descricao,valor}
+        let file = document.getElementById("imginput").files[0];
+        let pictpath = document.getElementById("imginput").files[0].name;
+        const data = new FormData();
+        data.append("file", file);
+        fetch("http://localhost:8082/api/v1/files/", {
+          method: "POST",
+          body: data,
+        });
 
+
+        const livro = {autor,name,descricao,valor,pictpath}
         addLivro(livro).then((response) => {
           console.log(response.data);
         })
@@ -137,7 +139,7 @@ const HeaderComponent = () => {
       return <div>
               <button className="btn btn-primary ml-2" onClick={perfil}>Sua conta</button>
               <button type="button" class="btn btn-default btn-smonClick" onClick={ktoken}>
-                <span class="glyphicon glyphicon-log-out"></span> Log out
+              <BoxArrowInRight/>
               </button>
             </div>
     } 
@@ -184,17 +186,22 @@ const HeaderComponent = () => {
               <Form>
                 <Form.Group class="mb-3" controlId='formAdd'>
                   <Form.Label>Nome</Form.Label>
-                  <Form.Control isInvalid={`${errors.name ? true : false}`} type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
+                  <Form.Control type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
                   { errors.name && <div className='invalid-feedback'>{errors.name}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formDesc'>
                   <Form.Label>Descrição</Form.Label>
-                  <Form.Control isInvalid={`${errors.descricao ? true : false}`} type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
+                  <Form.Control type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
                   { errors.descricao && <div className='invalid-feedback'>{errors.descricao}</div>}
+                </Form.Group>
+                <Form.Group class="mb-3" controlId='formAutor'>
+                  <Form.Label>Autor</Form.Label>
+                  <Form.Control type="text" onChange={handleAutor} placeholder='Insira o Autor do livro'/>
+                  { errors.autor && <div className='invalid-feedback'>{errors.autor}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formValor'>
                   <Form.Label>Valor</Form.Label>
-                  <Form.Control isInvalid={`${errors.valor ? true : false}`} type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
+                  <Form.Control type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
                   { errors.valor && <div className='invalid-feedback'>{errors.valor}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formImg'>
@@ -212,7 +219,7 @@ const HeaderComponent = () => {
                 */}
                   <Form.Label>Imagem do livro</Form.Label>
                   <input id='imginput' type="file" accept="image/png,image/jpg,image/jpeg" onChange={handleImg} placeholder='Insira a imagem conténdo a capa do livro'/>
-                  { <div>{imgErr}</div>}
+                  { <div style={{color:"red"}}>{imgErr}</div>}
                 </Form.Group>
               </Form>
             </Modal.Body>

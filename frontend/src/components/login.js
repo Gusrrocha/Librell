@@ -48,7 +48,7 @@ const Login = () => {
                         <form>
                             <div className='form-group mb-2'>
                                 <label className='form-label'>E-mail:</label>
-                                <input type="text"
+                                <input type="email"
                                        placeholder='Digite o endereço de e-mail'
                                        name='email'
                                        value={email}

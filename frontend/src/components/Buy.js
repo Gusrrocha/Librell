@@ -26,7 +26,10 @@ const Buy = () => {
        compra(pedid).then((response) => {
         console.log(response.data);
        }) 
+       localStorage.setItem("liv","");
+       navigator("/livros");
     }
+    
     return (
         <div className='container'>
             <br></br>

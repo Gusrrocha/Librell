@@ -11,7 +11,7 @@
 }
 
 .d-flex{
-  gap:20px;
+  list-style: none;
 }
 
 #container {
@@ -22,6 +22,12 @@
 
 
 #book{
-  height: 600px;
-  width: 100vw;
+  border: 2.5px solid;
+  border-radius: 20px;
+  position: absolute;
+  width:95%;
+  height:80%;
+  margin-left:20px;
+  margin-right:10px;
+  margin-top:20px;
 }

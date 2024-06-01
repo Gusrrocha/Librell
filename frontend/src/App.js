@@ -8,8 +8,9 @@ import Login from './components/login';
 import Books from './components/Books';
 import Profile from './components/Profile';
 import Buy from './components/Buy';
+import EditBook from './components/EditBook';
 function App() {
-  return (
+  return (    
     <div className="App">
       <BrowserRouter>
         <HeaderComponent />
@@ -26,6 +27,8 @@ function App() {
               <Route path='/livros' element = { <Books />}></Route>
               {/* // http://localhost:3000/buy */}
               <Route path='/buy' element = { <Buy />}></Route>
+              {/* // http://localhost:3000/edit */}
+              <Route path='/edit' element = {<EditBook/>}></Route>
           </Routes>
         <FooterComponent/>
       </BrowserRouter>

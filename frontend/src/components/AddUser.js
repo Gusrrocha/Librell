@@ -105,7 +105,7 @@ const AddUser = () => {
                         <div className='form-group mb-2'>
                             <label className='form-label'>E-mail:</label>
                             <input 
-                                type="text" 
+                                type="email" 
                                 placeholder='Insira o endereço de e-mail'
                                 name="email" 
                                 value={email}
