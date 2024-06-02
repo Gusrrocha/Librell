@@ -3,7 +3,6 @@ package com.rogu.librell.controllers;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rogu.librell.entities.Livro;
 import com.rogu.librell.entities.Pedido;
-import com.rogu.librell.entities.User;
 import com.rogu.librell.exceptions.BadRequestException;
 import com.rogu.librell.infra.RestErrorMessage;
 import com.rogu.librell.services.LivroService;

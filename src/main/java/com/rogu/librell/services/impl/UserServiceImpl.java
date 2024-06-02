@@ -54,9 +54,25 @@ public class UserServiceImpl implements UserService  {
 		rep.update(user.getFirstName(),user.getLastName(),user.getPassword(), user.getEmail(), id);
 	}
 	
+	public void update(User user, Long id) {
+		rep.update(user.getFirstName(),user.getLastName(), user.getEmail(), id);
+	}
+	
+	public void update(String password, Long id) {
+		rep.update(password, id);
+	}
+	
+	
+	
 	public void deleteUser(Long id) {
 		rep.deleteById(id);
 	}
+	
+	
+	
+	
+	
+	
 	/*
 	public UserDetails getLogin(User user) throws UsernameNotFoundException{
 		User resultado = rep.loginU(user.getUsername(), user.getPassword());

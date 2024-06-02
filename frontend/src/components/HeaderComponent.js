@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { addLivro } from '../services/LivroService';
 import { decodeToken } from 'react-jwt';
-import { BoxArrowInRight } from 'react-bootstrap-icons';
+import { BoxArrowInRight, Regex } from 'react-bootstrap-icons';
 
 const HeaderComponent = () => {
   const [name, setName] = useState("");
@@ -21,7 +21,6 @@ const HeaderComponent = () => {
     autor: ""
   })
   const [imgErr, setImgErr] = useState("")
-  const [imgOld, setimgOld] = useState("")
   const [show, setShow] = useState(false)
   let admin = false;
   
@@ -31,12 +30,13 @@ const HeaderComponent = () => {
   const handleAutor = (e) => setAutor(e.target.value);
   function validateForm(){
     let valid = true;
-    const regex = new RegExp("")
-    const errorsCopy = {... errors}
+    const errorsCopy = {...errors}
 
     if(name.trim()){
+      console.log("a")
       errorsCopy.name = "";
     } else{
+      console.log("b")
       errorsCopy.name = "Nome do livro é necessário";
       valid = false;
     }
@@ -57,7 +57,7 @@ const HeaderComponent = () => {
     if(autor.trim()){
       errorsCopy.autor = "";
     } else{
-      errorsCopy.autor = "Valor do livro é requerido";
+      errorsCopy.autor = "Autor do livro é requerido";
       valid = false;
     }
     setErrors(errorsCopy);
@@ -68,7 +68,7 @@ const HeaderComponent = () => {
   const handleImg = (e) => {
 
   }
-  const handleClose = () => setShow(false);
+  const handleClose = () => {setShow(false);setErrors("");}
   const handleShow = () => setShow(true);
 
   const handleForm = (e) => {
@@ -95,6 +95,8 @@ const HeaderComponent = () => {
           console.log(response.data);
         })
         document.getElementById("imginput").value = "";
+        setErrors("");
+        setDesc("");
         handleClose();
       }
     } 
@@ -154,9 +156,10 @@ const HeaderComponent = () => {
                 <a className="navbar-brand" href="/">Librell</a>
                 <a className='navbar-' href="/"></a>
             </nav> */}
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary-subtle" >
               <div class="container-fluid">
-                <a class="navbar-brand" href="/">Librell</a>
+                <a class="navbar-brand" href="/"><img src="Librell.jpg" style={{maxWidth:"80px", borderRadius:"1px"}}></img></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -187,22 +190,22 @@ const HeaderComponent = () => {
                 <Form.Group class="mb-3" controlId='formAdd'>
                   <Form.Label>Nome</Form.Label>
                   <Form.Control type="text" onChange={handleName} placeholder="Insira o nome do livro"/>
-                  { errors.name && <div className='invalid-feedback'>{errors.name}</div>}
+                  { errors.name && <div style={{color:"red"}}>{errors.name}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formDesc'>
                   <Form.Label>Descrição</Form.Label>
                   <Form.Control type="text" onChange={handleDesc} placeholder='Insira a descrição do livro'/>
-                  { errors.descricao && <div className='invalid-feedback'>{errors.descricao}</div>}
+                  { errors.descricao && <div style={{color:"red"}}>{errors.descricao}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formAutor'>
                   <Form.Label>Autor</Form.Label>
                   <Form.Control type="text" onChange={handleAutor} placeholder='Insira o Autor do livro'/>
-                  { errors.autor && <div className='invalid-feedback'>{errors.autor}</div>}
+                  { errors.autor && <div style={{color:"red"}}>{errors.autor}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formValor'>
                   <Form.Label>Valor</Form.Label>
-                  <Form.Control type="number" onChange={handleValue} placeholder='Insira o valor do livro'/>
-                  { errors.valor && <div className='invalid-feedback'>{errors.valor}</div>}
+                  <Form.Control type="text" onChange={handleValue} placeholder='Insira o valor do livro'/>
+                  { errors.valor && <div style={{color:"red"}}>{errors.valor}</div>}
                 </Form.Group>
                 <Form.Group class="mb-3" controlId='formImg'>
                 {/*                 

@@ -1,4 +1,8 @@
 html, body {
+  background-image: url("/public/teste.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   margin: 0;
   height: 100%;
   overflow: auto;
@@ -10,15 +14,5 @@ html, body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-:root{
-  --color-primary: #2BDEFD;
-  --color-title: #D7F9FF;
-  --color-text: #98D4DE;
-  --color-bg-darkhome: #01080E;
-  --btn-color-bg: #2BFDBE;
-  --btn-color-text: #01080E;
-  --fiap-primary: #E81B5C;
 }
 

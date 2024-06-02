@@ -39,8 +39,9 @@ const Books = () => {
       if (window.confirm('Tem certeza que deseja deletar este item?')){
         fetch("http://localhost:8082/api/v1/livro/"+livr.id, {
         method: "DELETE"
-        });
+        }); 
       }
+      
     }
   const token = getToken();
   if(token)
@@ -53,35 +54,37 @@ const Books = () => {
   }
   return (
     <div className='container-fluid'>
-        <h4>Livros</h4>
-        <div className='d-flex p-5 bd-highlight flex-wrap overflow-auto align-items-baseline ' id="book">
+        <h4 style={{color:"white"}}>Livros</h4>
+        <div className='d-flex p-5 bd-highlight flex-wrap overflow-auto align-items-baseline justify-content-start' id="book">
           {
-            livros.map(livro =>
-              <div class="d-flex flex-column border justify-content-start" style={{height: "100px"} && {width: "150px"}}  key={livro.id}>
-                <LazyLoad>
-                <img style={{width:"100%", maxWidth:"150px"}} src={`/images/${livro.pictpath}`} alt={livro.name} height={170}>
-                </img>
-                </LazyLoad>
-                <div class="d-flex flex-column">
-                  <label class="flex-fill" style={{fontSize:"12px"}}>Nome: {livro.name}</label>
+            livros.map(livro => 
+              <div className="itemb1">
+                <div class="d-flex flex-column" style={{height: "100px"} && {width: "150px"}}  key={livro.id}>
+                  <LazyLoad>
+                  <img style={{width:"100%", maxWidth:"150px"}} src={`/images/${livro.pictpath}`} alt={livro.name} height={170}>
+                  </img>
+                  </LazyLoad>
+                  <div class="d-flex flex-column">
+                    <label class="flex-fill" className="nameB">{livro.name}</label>
+                    <div class="d-flex flex-row">
+                    <label style={{fontSize:"12px", marginRight:"5px"}}>Descrição:</label>
+                    <p style={{fontSize:"8px",overflowY:"auto", overflowWrap:"break-word",maxHeight:"20px"}}>{livro.descricao}</p>
+                    </div>
+                    <label class="flex-fill" style={{fontSize:"12px"}}>R$ {livro.valor}</label>
                   <div class="d-flex flex-row">
-                  <label style={{fontSize:"12px", marginRight:"5px"}}>Descrição:</label>
-                  <p style={{fontSize:"8px",overflowY:"auto", overflowWrap:"break-word",maxHeight:"20px"}}>{livro.descricao}</p>
+                  <button class="btn btn-outline-success" style={{display:"inline-block", padding:"0px 5px"}} onClick={() => Buy(livro)}>Comprar</button>
+                  {(admin) ?
+                    <>
+                    <li class="nav-item">
+                    <button type="button" style={{display:"inline-block", padding:"2px 5px"}} class="btn btn-default btn-smonClick" onClick={() => handleDelete(livro)}><Trash/></button>
+                    </li>
+                    <button type="button" style={{display:"inline-block", padding:"2px 5px"}} class="btn btn-default btn-smonClick" onClick={() => Edit(livro)}><PencilSquare/></button>
+                  </>
+                  :
+                  ""
+                  }
                   </div>
-                  <label class="flex-fill" style={{fontSize:"12px"}}>Valor: {livro.valor}</label>
-                <div class="d-flex flex-row">
-                <button class="btn btn-outline-success" style={{display:"inline-block", padding:"0px 5px"}} onClick={() => Buy(livro)}>Comprar</button>
-                {(admin) ?
-                  <>
-                  <li class="nav-item">
-                  <button type="button" style={{display:"inline-block", padding:"2px 5px"}} class="btn btn-default btn-smonClick" onClick={() => handleDelete(livro)}><Trash/></button>
-                  </li>
-                  <button type="button" style={{display:"inline-block", padding:"2px 5px"}} class="btn btn-default btn-smonClick" onClick={() => Edit(livro)}><PencilSquare/></button>
-                </>
-                :
-                ""
-                }
-                </div>
+                  </div>
                 </div>
               </div>
             )

@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rogu.librell.dao.request.AddRequest;
 import com.rogu.librell.dao.request.LoginRequest;
 import com.rogu.librell.dao.response.AuthResponse;
-import com.rogu.librell.entities.Livro;
 import com.rogu.librell.entities.User;
 import com.rogu.librell.services.AuthenticationService;
+import com.rogu.librell.services.JwtService;
 import com.rogu.librell.services.impl.UserServiceImpl;
-
+import com.rogu.librell.dao.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 
 
@@ -37,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final AuthenticationService authenticationService;
 	private final PasswordEncoder pwenc;
+	private final JwtService jwtservice;
 	@Autowired
 	UserServiceImpl service;
 	
@@ -57,6 +58,11 @@ public class UserController {
 		return ResponseEntity.ok(result);
 	}
     
+    @PostMapping("/getOne")
+    public ResponseEntity<User> getOne(@RequestBody String email){
+    	User us = service.findbyEm(email.replace("=", "").replace("%40", "@"));
+    	return ResponseEntity.ok(us);
+    }
 	@PutMapping("/{id}")
 	public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable Long id) {
 		try {
@@ -70,8 +76,22 @@ public class UserController {
 		}
 	}
 	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<AuthResponse> update(@RequestBody User user, @PathVariable Long id) {
+		service.update(user, id);
+		User us = service.findbyEm(user.getEmail());
+		var jwt = jwtservice.generateToken(us);
+		return ResponseEntity.ok(AuthResponse.builder().token(jwt).build());
+	}
+	
+	@PutMapping("/update/password/{id}")
+	public void update(@RequestBody String password,@PathVariable Long id) {
+		
+		service.update(pwenc.encode(password), id);
+	}
+	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id){
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
 		try {
 			service.deleteUser(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -10,14 +10,7 @@ const EditBook = () => {
   const [valor, setValue] = useState(livro.valor);
   const [autor, setAutor] = useState(livro.autor);
   const [imgErr, setImgErr] = useState("")
-  const [imgOld, setimgOld] = useState("")
-  const [errors, setErrors] = useState({
-    name: "",
-    descricao: "",
-    valor: "",
-    autor: ""
-  })
-
+  
   const handleName = (e) => setName(e.target.value);
   const handleDesc = (e) => setDesc(e.target.value);
   const handleValue = (e) => setValue(e.target.value);

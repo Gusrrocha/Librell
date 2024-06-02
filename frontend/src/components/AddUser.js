@@ -73,7 +73,7 @@ const AddUser = () => {
         <br/> <br/>
         <div className='linha'>
             <div className='card col-md-6 offset-md-3 offset-md-3'>
-                <h2 className='text-center'>Adicionar Usuário</h2>
+                <h2 className='text-center'>Cadastro</h2>
                 <div className='card-body'>
                     <form>
                         <div className='form-group mb-2'>
