@@ -65,7 +65,10 @@ const Login = () => {
                                        name='password'
                                        value={password}
                                        className={`form-control`}
-                                       onChange={handlePassword}>
+                                       onChange={handlePassword}
+                                       maxLength={8}
+                                       minLength={8}
+                                       >
                                 </input>
                             </div>
                             <button className='btn btn-success' onClick={logUser}>Entrar</button>

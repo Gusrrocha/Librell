@@ -35,7 +35,7 @@ public class LivroService {
 	}
 	
 	public void updateBook(Livro livro, Long id) {
-		rep.update(livro.getName(), livro.getDescricao(), livro.getValor(),livro.getPictpath(),id);
+		rep.update(livro.getName(), livro.getAutor(),livro.getDescricao(), livro.getValor(),livro.getPictpath(),id);
 	}
 	
 	public void addPedido(Pedido pedido) {

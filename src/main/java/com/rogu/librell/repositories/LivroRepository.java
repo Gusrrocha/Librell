@@ -11,9 +11,9 @@ import jakarta.transaction.Transactional;
 public interface LivroRepository extends JpaRepository<Livro, Long>{
 	@Modifying
 	@Transactional
-	@Query(nativeQuery = true, value= "UPDATE livro SET name = :name2, descricao = :descricao2, "
+	@Query(nativeQuery = true, value= "UPDATE livro SET name = :name2, autor = :autor2, descricao = :descricao2, "
 			+ "valor = :valor2, pictpath = :pictpath2 WHERE id = :id2")
-	void update(String name2, String descricao2, Float valor2, String pictpath2, Long id2);
+	void update(String name2, String autor2, String descricao2, Float valor2, String pictpath2, Long id2);
 	
 	@Query(nativeQuery = true, value="SELECT * FROM livro WHERE id = :id2")
 	Livro findbyId(Long id2);

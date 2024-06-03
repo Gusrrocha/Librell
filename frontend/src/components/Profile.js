@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, Col, Modal, Row, Table } from 'react-bootstrap'
 import { PencilSquare, Trash } from 'react-bootstrap-icons'
 import { useNavigate } from 'react-router-dom'
-import { getToken, killToken, login } from '../services/auth'
+import { getToken, isAdmin, killToken, login } from '../services/auth'
 import { decodeToken } from 'react-jwt'
 import { useEffect } from 'react'
 import { getBool, getUser, updateInfo, updatePw } from '../services/UserService'
@@ -17,7 +17,7 @@ const Profile = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {if (!isAdmin()) {setShow(true);} else{alert("Não pode modificar o admin.")}}
   const handleOPw = (e) => setOPw(e.target.value);
   const handleNPw = (e) => setNPw(e.target.value);
 
@@ -35,8 +35,12 @@ const Profile = () => {
     for (let i = 0; i < pedidos.length; i++) {
       rows.push(<tr>
                   <td>{i}</td>
+                  <td><img src={`/images/${pedidos[i].livro.pictpath}`} alt="Imagem não encontrada" onError={({ currentTarget }) => {
+                                                                                                              currentTarget.onerror = null; // prevents looping
+                                                                                                              currentTarget.src=pedidos[i].livro.pictpath;
+                                                                                                            }}></img></td>
                   <td>{pedidos[i].livro.name}</td>
-                  <td>{pedidos[i].livro.valor}</td>
+                  <td>R$ {pedidos[i].livro.valor.toString().replace(".",",")}</td>
                   <td>{pedidos[i].endereco}</td>
                   <td><button type="button" class="btn btn-default btn-smonClick" onClick={() => handleDeleteP(pedidos[i].id)}><Trash/></button></td>
                 </tr>
@@ -237,7 +241,8 @@ const Profile = () => {
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>Produto</th>
+                              <th>Foto</th>
+                              <th>Nome</th>
                               <th>Valor</th>
                               <th>Endereço</th>
                             </tr>

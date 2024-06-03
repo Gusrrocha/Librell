@@ -12,7 +12,7 @@ import { BoxArrowInRight, Regex } from 'react-bootstrap-icons';
 const HeaderComponent = () => {
   const [name, setName] = useState("");
   const [descricao, setDesc] = useState("");
-  const [valor, setValue] = useState("");
+  const [val, setValue] = useState("");
   const [autor, setAutor] = useState("");
   const [errors, setErrors] = useState({
     name: "",
@@ -48,8 +48,15 @@ const HeaderComponent = () => {
       valid = false;
     }
 
-    if(valor.trim()){
-      errorsCopy.valor = "";
+    if(val.trim()){
+      const regex = /([1-9]+|0)\,\d{1,2}/
+      if (regex.test(val)){
+        errorsCopy.valor = "";
+      }
+      else{
+        errorsCopy.valor = "Atenda ao formato {0,00}."
+        valid = false;
+      }
     } else{
       errorsCopy.valor = "Valor do livro é requerido";
       valid = false;
@@ -74,12 +81,22 @@ const HeaderComponent = () => {
   const handleForm = (e) => {
     e.preventDefault();
     if(validateForm()){
-    if(document.getElementById("imginput").value === "")
-    {
-      setImgErr("Insira a imagem do livro.")
-    }   
-    else
+      if(document.getElementById("imginput").value === "")
       {
+          let pictpath = "noimage.png";
+
+          let valor = parseFloat(val.replace(",","."))
+          
+          const livro = {autor,name,descricao,valor,pictpath}
+          addLivro(livro).then((response) => {
+            console.log(response.data);
+          })
+          document.getElementById("imginput").value = "";
+          setErrors("");
+          setDesc("");
+          handleClose();
+          }
+    else{
         let file = document.getElementById("imginput").files[0];
         let pictpath = document.getElementById("imginput").files[0].name;
         const data = new FormData();
@@ -89,7 +106,8 @@ const HeaderComponent = () => {
           body: data,
         });
 
-
+        let valor = parseFloat(val.replace(",","."))
+        
         const livro = {autor,name,descricao,valor,pictpath}
         addLivro(livro).then((response) => {
           console.log(response.data);
@@ -98,8 +116,8 @@ const HeaderComponent = () => {
         setErrors("");
         setDesc("");
         handleClose();
-      }
-    } 
+      } 
+    }
   }
   const navigator = useNavigate();
 
@@ -224,10 +242,10 @@ const HeaderComponent = () => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose}>
-                Close
+                Fechar
               </Button>
               <Button variant="primary" onClick={handleForm}>
-                Save Changes
+                Salvar
               </Button>
             </Modal.Footer>
           </Modal>

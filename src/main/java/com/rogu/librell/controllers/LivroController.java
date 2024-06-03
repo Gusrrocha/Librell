@@ -48,6 +48,7 @@ public class LivroController {
 	{
 		try 
 		{
+			System.out.println(livro);
 			service.addBook(livro);
 			return ResponseEntity.ok().body("Livro adicionado com sucesso!");
 		} 

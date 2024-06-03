@@ -33,7 +33,7 @@ const AddUser = () => {
     }
     function validateForm(){
         let valid = true;
-        const regex = new RegExp("")
+       
         const errorsCopy = {... errors}
 
         if(firstName.trim()){
@@ -51,14 +51,28 @@ const AddUser = () => {
         }
 
         if(email.trim()){
-            errorsCopy.email = "";
+            const rege = /[\s\S]+\u0040{1,1}\W*[\s\S]+(\.com)\W*/
+            if (rege.test(email)){
+                errorsCopy.email = "";
+            }
+            else{
+                errorsCopy.email = "O e-mail inserido não atende ao formato correto. Ex: nome@(hotmail/gmail/outlook/etc...).com";
+                valid = false;
+            }
         } else{
             errorsCopy.email = "Email é requerido";
             valid = false;
         }
 
         if(password.trim()){
-            errorsCopy.password = "";
+            const regex = /(\d|[\s\S]){8,8}/
+            if(regex.test(password)){
+                errorsCopy.password = "";
+            }
+            else{
+                errorsCopy.password = "A senha deve conter 8 dígitos.";
+                valid = false;
+            }
         } else{
             errorsCopy.password = "A senha não pode ser deixada em branco";
             valid = false;
@@ -124,6 +138,7 @@ const AddUser = () => {
                                 value={password}
                                 className={`form-control ${ errors.password ? 'is-invalid' : ''}`}
                                 onChange={handlePassword}
+                                maxLength={8}
                             >
                             </input>
                             { errors.password && <div className='invalid-feedback'>{errors.password}</div>}

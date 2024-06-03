@@ -6,7 +6,7 @@ import LazyLoad from 'react-lazyload';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../services/auth';
 import { decodeToken } from 'react-jwt';
-import { PencilSquare, Trash, TrashFill } from 'react-bootstrap-icons';
+import { PencilSquare, Trash } from 'react-bootstrap-icons';
 const Books = () => { 
   const [livros, setLivros] = useState([]);
   let admin = "";
@@ -61,7 +61,10 @@ const Books = () => {
               <div className="itemb1">
                 <div class="d-flex flex-column" style={{height: "100px"} && {width: "150px"}}  key={livro.id}>
                   <LazyLoad>
-                  <img style={{width:"100%", maxWidth:"150px"}} src={`/images/${livro.pictpath}`} alt={livro.name} height={170}>
+                  <img style={{width:"100%", maxWidth:"150px"}} src={`/images/${livro.pictpath}`} alt="Imagem não encontrada" onError={({ currentTarget }) => {
+                                                                                                                                currentTarget.onerror = null; // prevents looping
+                                                                                                                                currentTarget.src=livro.pictpath;
+                                                                                                                              }} height={170}>
                   </img>
                   </LazyLoad>
                   <div class="d-flex flex-column">
@@ -70,7 +73,8 @@ const Books = () => {
                     <label style={{fontSize:"12px", marginRight:"5px"}}>Descrição:</label>
                     <p style={{fontSize:"8px",overflowY:"auto", overflowWrap:"break-word",maxHeight:"20px"}}>{livro.descricao}</p>
                     </div>
-                    <label class="flex-fill" style={{fontSize:"12px"}}>R$ {livro.valor}</label>
+                    <label class="flex-fill" style={{fontSize:"12px"}}>{livro.autor}</label>
+                    <label class="flex-fill" style={{fontSize:"12px"}}>R$ {livro.valor && (livro.valor).toString().replace(".",",")}</label>
                   <div class="d-flex flex-row">
                   <button class="btn btn-outline-success" style={{display:"inline-block", padding:"0px 5px"}} onClick={() => Buy(livro)}>Comprar</button>
                   {(admin) ?
