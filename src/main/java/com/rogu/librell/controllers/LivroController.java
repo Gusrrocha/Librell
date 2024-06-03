@@ -72,11 +72,20 @@ public class LivroController {
 	
 	@PostMapping("/buy")
 	public ResponseEntity<String> addPedido(@RequestBody Pedido pedido){
-		System.out.println(pedido);
 		pedido.setUser(userv.findbyEm(pedido.getUser().getEmail()));
+		pedido.setLivro(service.findById(pedido.getLivro().getId()));
 		service.addPedido(pedido);
 		return ResponseEntity.ok("Pedido adicionado com sucesso!");
 	}
+	
+	@PostMapping("/getPedido/{id}")
+	public ResponseEntity<List<Pedido>> getAllOrder(@PathVariable Long id){
+		List<Pedido> lista = service.getAllOrder(id);
+		return ResponseEntity.ok(lista);
+		
+	}
+	
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id){
@@ -88,5 +97,17 @@ public class LivroController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@DeleteMapping("/pedido/{id}")
+	public ResponseEntity<HttpStatus> deletePedido(@PathVariable Long id){
+		try {
+			service.deletePedido(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	
 }

@@ -5,12 +5,17 @@ package com.rogu.librell.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.rogu.librell.entities.Pedido;
 import com.rogu.librell.entities.User;
+import com.rogu.librell.repositories.PedRepository;
 import com.rogu.librell.repositories.UserRepository;
 import com.rogu.librell.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService  {
 	
 	private final UserRepository rep;
- 
 	
     @Override
     public UserDetailsService userDetailsService() {
@@ -61,10 +65,7 @@ public class UserServiceImpl implements UserService  {
 	public void update(String password, Long id) {
 		rep.update(password, id);
 	}
-	
-	
-	
-	public void deleteUser(Long id) {
+	public void deleteUser(Long id) {	
 		rep.deleteById(id);
 	}
 	

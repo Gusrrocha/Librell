@@ -4,11 +4,12 @@ import { getToken } from '../services/auth';
 import { decodeToken } from 'react-jwt';
 import { compra } from '../services/LivroService';
 const Buy = () => {
-    const livro = JSON.parse(localStorage.getItem("liv"));
+    const livr = JSON.parse(localStorage.getItem("liv"));
     const [endereco, setEndereco] = useState("");
     const [cNumber, setCNumber] = useState("");
     const [cCVV, setcCVV] = useState("");
 
+    let livro = "";
     let user = "";
     const navigator = useNavigate();
     const handleEndereco = (e) => setEndereco(e.target.value);
@@ -19,10 +20,11 @@ const Buy = () => {
     
     const Comprar = (e) =>
     {
-       let livro_id = livro.id;
+       let livro_id = livr.id;
        e.preventDefault();
        user = {"id":null,"firstName":null,"lastName":null,"email":dec.email,"password":"null"}
-       const pedid = {livro_id, user, endereco, cNumber, cCVV}
+       livro = {"id":livro_id,"autor":null,"name":null,"descricao":null,"valor":null,"pictpath":null}
+       const pedid = {livro, user, endereco, cNumber, cCVV}
        compra(pedid).then((response) => {
         console.log(response.data);
        }) 
@@ -35,15 +37,15 @@ const Buy = () => {
             <br></br>
             <br></br>
             <br></br>
-            <div className='card col-md-2' style={{width:"100%", position:"relative", minWidth: "auto"}}>
+            <div className='card col-md-4 offset-md-3' style={{position:"absolute", minWidth: "auto"}}>
                 <h2 className='text-center mt-3'>Compra</h2>
                 <div className='card-body'>
                     <div class="d-flex flex-row bd-highlight mb-3">
-                        <img src={`${livro.pictpath.slice(72).replace("\\","/").replace("]","")}`}></img>
+                        <img src={`/images/${livr.pictpath}`} style={{width:"100%", maxWidth:"120px"}}></img>
                         <div class="d-flex flex-column" style={{width:"100%"}}>
-                            <label class=" border rounded flex-fill">Nome: {livro.name}</label>
-                            <label class="border rounded flex-fill">Descrição: {livro.descricao}</label>
-                            <label class="border rounded flex-fill">Valor: {livro.valor}</label>
+                            <label class="flex-fill" style={{marginLeft:"10px"}}>Nome: {livr.name}</label>
+                            <label class="flex-fill" style={{marginLeft:"10px"}}>Descrição: {livr.descricao}</label>
+                            <label class="flex-fill" style={{marginLeft:"10px"}}>Valor: {livr.valor}</label>
                         </div>
                     </div>   
                     <form>

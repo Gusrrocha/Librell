@@ -14,5 +14,8 @@ public interface LivroRepository extends JpaRepository<Livro, Long>{
 	@Query(nativeQuery = true, value= "UPDATE livro SET name = :name2, descricao = :descricao2, "
 			+ "valor = :valor2, pictpath = :pictpath2 WHERE id = :id2")
 	void update(String name2, String descricao2, Float valor2, String pictpath2, Long id2);
+	
+	@Query(nativeQuery = true, value="SELECT * FROM livro WHERE id = :id2")
+	Livro findbyId(Long id2);
 		
 }

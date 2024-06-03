@@ -1,6 +1,7 @@
 package com.rogu.librell.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class LivroService {
 		return lista;
 	}
 	
+	public Livro findById(Long id) {
+		return rep.findbyId(id);
+	}
 	public void addBook(Livro livro) {
 		rep.save(livro);
 	}
@@ -41,5 +45,16 @@ public class LivroService {
 	public void deleteBook(Long id) {
 		rep.deleteById(id);
 	}
+	
+	public void deletePedido(Long id) {
+		ped.deleteById(id);
+	}
+	
+	
+	public List<Pedido> getAllOrder(Long id){
+		List<Pedido> list = ped.findByUserId(id);
+		return list;
+	}
+	
 
 }

@@ -23,6 +23,7 @@ import com.rogu.librell.dao.request.AddRequest;
 import com.rogu.librell.dao.request.LoginRequest;
 import com.rogu.librell.dao.response.AuthResponse;
 import com.rogu.librell.entities.User;
+import com.rogu.librell.repositories.UserRepository;
 import com.rogu.librell.services.AuthenticationService;
 import com.rogu.librell.services.JwtService;
 import com.rogu.librell.services.impl.UserServiceImpl;
@@ -38,9 +39,12 @@ public class UserController {
 	private final AuthenticationService authenticationService;
 	private final PasswordEncoder pwenc;
 	private final JwtService jwtservice;
+	
 	@Autowired
 	UserServiceImpl service;
 	
+	@Autowired
+	UserRepository rep;
 	@PostMapping("/cadastro")
 	public ResponseEntity<AuthResponse> signup(@RequestBody AddRequest request) {
 		return ResponseEntity.ok(authenticationService.signup(request));
@@ -98,6 +102,18 @@ public class UserController {
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/pw/{id}")
+	public ResponseEntity<Boolean> compare(@RequestBody String password, @PathVariable Long id){
+		User us = rep.findByIdN(id);
+		
+		if (pwenc.matches(password.replace("=", ""), us.getPassword())){
+			return ResponseEntity.ok(true);
+		}
+		else {
+			return ResponseEntity.ok(false);
 		}
 	}
 	

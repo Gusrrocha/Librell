@@ -25,16 +25,17 @@ public class Pedido implements Serializable {
 	private String endereco;
 	private Long cNumber;
 	private Long cCVV;
-	private Long livro_id;
+	@ManyToOne
+	private Livro livro;
 	@ManyToOne
 	private User user;
 	
 	public Pedido() {
 	}
-	public Pedido(Long id, User user, Long livro_id, String endereco, Long cNumber, Long cCVV) {
+	public Pedido(Long id, User user, Livro livro, String endereco, Long cNumber, Long cCVV) {
 		this.id = id;
 		this.user = user;
-		this.livro_id = livro_id;
+		this.livro = livro;
 		this.endereco = endereco;
 		this.cNumber = cNumber;
 		this.cCVV = cCVV;
@@ -70,16 +71,16 @@ public class Pedido implements Serializable {
 		this.cCVV = cCVV;
 	}
 	
-	public Long getLivro_id() {
-		return livro_id;
+	public Livro getLivro() {
+		return livro;
 	}
-	public void setLivro_id(Long livro_id) {
-		this.livro_id = livro_id;
+	public void setLivro(Livro livro) {
+		this.livro = livro;
 	}
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", endereco=" + endereco + ", cNumber=" + cNumber + ", cCVV=" + cCVV + ", livro_id="
-				+ livro_id + ", user=" + user + "]";
+		return "Pedido [id=" + id + ", endereco=" + endereco + ", cNumber=" + cNumber + ", cCVV=" + cCVV + ", livro="
+				+ livro + ", user=" + user + "]";
 	}
 	
 	
